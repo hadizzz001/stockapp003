@@ -1,0 +1,18 @@
+
+
+<% for(var i = 1; i < delivery.length;i++){ %>
+
+    <tr> 
+        <td><%= delivery[i].Dname %></td>
+        <td><%= delivery[i].Did %></td>
+        <td><%= delivery[i].Damount %></td> 
+        <td>
+            <a href="/update_delivery?id=<%= delivery[i]._id %>"class="btn border-shadow update">
+                <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+            </a> 
+        </td>
+    </tr>
+    <% } %>
+    
+    
+    

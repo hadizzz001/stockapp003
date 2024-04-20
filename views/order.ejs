@@ -1,0 +1,157 @@
+
+<%-include('include/_header')%>
+
+
+<main id="site-main">
+    <div class="container">
+        <div class="form-title text-center">
+            <h2 class="text-dark">All Orders</h2>
+             
+        </div>
+        
+
+        <div class="box-nav d-flex justify-between">
+            <div class="filter">
+                <a href="/"><i class="fas fa-angle-double-left"></i>Main Page</a>
+
+                <div class="box-nav d-flex justify-between mySearchPD"> 
+                    <div id="cover">
+                        <form id="searchform">
+                          <div class="tb">
+                            <div class="td"><input type="text" id="searchText" placeholder="Search" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"></div>
+                            <div class="td" id="s-cover">
+                              <button type="submit">
+                                <div id="s-circle"></div>
+                                <span></span>
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div> 
+                </div>   
+              </div> 
+            </div> 
+            <div class="box-nav d-flex justify-between" style="float: right; display: block;cursor: pointer;"> 
+              <a class="border-shadow btnorder" style="margin-right: 0;">
+                  <span onclick="exportCSVExcel()" class="text-gradient">Export Excel <i class="fa-solid fa-file-excel"></i></span>
+              </a> 
+         </div>
+ 
+         
+
+ 
+        <form action="/"method="POST">
+            <table id="tblid" class="table">
+                <thead class="thead-dark">
+                    <tr>  
+                        <th>#</th>  
+                        <th>Phone</th>  
+                        <th>Name</th>  
+                        <th>Address</th>  
+                        <th>Item Name</th> 
+                        <th>QTY</th> 
+                        <th>Unit ($)</th> 
+                        <th>Total ($)</th> 
+                        <th>Order Date</th> 
+                        <th class="no-export">Action</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <%-include('include/_show')%>
+                </tbody>
+            </table> 
+            
+        </form>
+        
+       
+        
+
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="/js/order.js" ></script>
+ 
+
+</body>
+
+<footer>
+<p></p>
+</footer>
+
+</html>
+
+ 
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script>
+
+updateSubTotal(); 
+myAddRow(); 
+var totalval ;
+function updateSubTotal() { 
+  var table = document.getElementById("tblid");
+  let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+    return total + parseFloat(row.cells[7].innerHTML);
+  }, 0);
+  totalval = subTotal.toFixed(2);
+}
+
+function myAddRow() {
+  var table = document.getElementById("tblid");
+  var row = table.insertRow(table.rows.length);
+  var cell0 = row.insertCell(0); 
+  var cell1 = row.insertCell(1); 
+  cell0.innerHTML = "Total($)"; 
+  cell1.innerHTML = totalval;  
+}
+
+
+  
+
+
+ 
+
+
+        function exportCSVExcel() { 
+            var request1 = {
+                "url" : `${urll}/api/login/63f2585545933bb8d5c0b8f9`,
+                "method" : "GET"
+            }   
+                
+            $.ajax(request1).done(function(response){  
+            if(response.login == 1){  
+                if(mac == response.mac && tabID == response.tid ){
+
+            $('#tblid').table2excel({
+                exclude: ".no-export",
+                filename: "order.xls",
+                fileext: ".xls",
+                exclude_links: true,
+                exclude_inputs: true
+            });
+
+        }else if(entered == null){ 
+            alert("Application already in use , please logout to continue..."); 
+            window.location.replace("/auth?in=1");
+        } 
+        }else if(response.login == 0 && entered == null) {  
+            alert("Please login to continue");
+            window.location.replace("/auth?in=1");
+        }
+
+        }); 
+            
+        }
+
+
+
+
+
+ 
+
+
+</script>
+
+ 
+ 

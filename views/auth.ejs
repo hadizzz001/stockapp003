@@ -1,0 +1,86 @@
+<%-include('include/_header')%>
+
+<main id="site-main">
+    <div class="container">
+ 
+
+        <div class="form-title text-center">
+            <h2 class="text-dark">Login</h2>
+            <span class="text-light">Use the below form to login</span>
+        </div>
+
+
+        <%-include('include/_form5')%>
+
+        <div id="logout2" style="text-align: center;cursor: pointer;"><a onclick='logout()' class="nav-brand text-dark" style="font-size: 1em;"><i class="fa-solid fa-right-from-bracket"></i>Logout from other device</a></div> 
+    </div>
+</main>
+ 
+
+
+<%-include('include/_footer')%>
+
+<script>
+    document.getElementById("logout").style.display = "none";
+
+    if(tid == 0){
+        document.getElementById("logout2").style.display = "none";
+    }
+
+    var user1 = urlParams.get('Username');
+    var pass1 = urlParams.get('Password');
+
+    if(user1 =="Admin" && pass1 =="123456"){ 
+        window.location.replace("/");
+    }
+
+
+  $("#add_acount").submit(function(event){ 
+    $("#add_acount").prop('disabled', true); 
+    var user = document.getElementById("username").value;
+    var pass = document.getElementById("password").value;  
+
+    if(tid == 0){
+    var data1 = {
+        login: 1,
+        mac: mac,
+        tid: tabID
+    } 
+
+    if(user == "Admin" && pass == "123456"){
+    var request = {
+        "url" : `${urll}/api/login/63f2585545933bb8d5c0b8f9`,
+        "method" : "PUT",
+        "data" : data1
+    }
+
+    $.ajax(request).done(function(response){ 
+        alert("Login Successful!");
+        window.location.replace("/");
+    }); 
+
+
+    
+    }
+    else if(entered == null){
+    alert("Incorrect username or password!");
+    window.location.replace("/auth?in=1");
+    }
+
+
+    
+
+
+
+
+
+
+
+}else{
+    alert("Application already in use , please logout to continue..."); 
+}
+ 
+
+});
+
+</script>

@@ -1,0 +1,261 @@
+<%-include('include/_header')%>
+
+<main id="site-main">
+    <div class="container">
+        <div class="box-nav d-flex justify-between">
+<div class="filter">
+    <a href="/order"><i class="fas fa-angle-double-left"></i>Previous Page</a>
+</div>
+        </div>
+
+        <div class="form-title text-center">
+            <h2 class="text-dark">Update order</h2>
+            <span class="text-light">Use the below form to update the Order</span>
+        </div> 
+
+
+
+
+
+
+
+
+
+
+        
+<form id="update_user">
+    <div class="new_user">
+        <div class="form-group">
+            <label for="clientPhone" class="text-light">Client Phone</label> 
+            <input type="text" id="clientPhone" name="clientPhone" value="<%= user.clientPhone %>" placeholder="Phone Number" maxlength="10" required>
+        </div>
+
+       <div class="form-group">
+           <label for="clientName" class="text-light">Client Name</label>  
+           <input type="hidden" id="userid" name="id" value="<%= user._id %>">
+           <input type="hidden" id="selecteditem" name="selecteditem" value="<%= user.item %>" >
+           <input type="text" name="clientName" id="clientName" value="<%= user.clientName %>" placeholder="Client Name" required>
+       </div> 
+
+       <div class="form-group">
+        <label for="clientAddress" class="text-light">Address</label>
+        <input type="text" name="clientAddress" id="clientAddress" value="<%= user.clientAddress %>" placeholder="Address" required> 
+    </div> 
+
+       <div class="form-group"> 
+        <label for="item" class="text-light">Item</label>  
+        <select name="item" id="sltid" required>  
+         <% for(var i = 0; i < items.length;i++){ %> 
+            <% if(items[i].instock == 0){ %>
+                <option data-id="<%= items[i]._id %>" data-price="<%= items[i].price%>" data-max="<%= items[i].instock %>" data-name="<%= items[i].itemName %>" disabled>
+                    <%= items[i].itemName.toLowerCase() %>
+                </option> 
+                <% }else { %>
+                <option data-id="<%= items[i]._id %>" data-price="<%= items[i].price%>" data-max="<%= items[i].instock %>" data-name="<%= items[i].itemName %>">
+                    <%= items[i].itemName %>
+                </option>  
+            <% } } %>
+       </select> 
+    </div>
+ 
+       
+       <div class="form-group">
+           <label for="qty" class="text-light">QTY</label> 
+           <input type="number" id="qty" name="qty" min="1" value="<%= user.qty %>" placeholder="Number of Items" required>
+       </div>
+
+       <div class="form-group">
+        <label for="price" class="text-light">Unit Amount($)</label> 
+        <input type="text" name="price" id="price" value="<%= user.price %>" readonly>
+    </div>
+
+       <div class="form-group">
+           <label for="total" class="text-light">Total Amount($)</label> 
+           <input type="text" id="total" name="total" value="<%= user.total %>">
+       </div>
+
+       <div class="form-group"> 
+        <input type="text" id="instock" name="instock" value="<%= user.instock%>" hidden>  
+    </div>
+
+       <div class="form-group">
+           <button type="button" id="submit" class="btn text-dark update">save</button>
+       </div>
+       
+    </div>
+</form>
+
+
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer" ></script>
+
+<script>
+const urll= "https://stockappp1.onrender.com"; 
+    var idx, total ,price, qty, max, itmid, selecteditem, fqty, firstitm, firststck , address, phone, clientname , stk , oid , valid_max; 
+
+    window.addEventListener('load', function () {   
+    fqty =  $("#qty").val(); 
+    selecteditem = $('#selecteditem').val();
+    document.getElementById('sltid').value = selecteditem; 
+    price = $("#sltid").find(':selected').attr('data-price'); 
+    firststck = $("#sltid").find(':selected').attr('data-max'); 
+    max = $("#sltid").find(':selected').attr('data-max'); 
+    itmid = $("#sltid").find(':selected').attr('data-id'); 
+    firstitm = $("#sltid").find(':selected').attr('data-id'); 
+    valid_max = parseInt(max) + parseInt(fqty); 
+    qty =  $("#qty").val();    
+    
+    const input = document.getElementById("qty");
+    const inputHandler = function(e) { 
+        qty =  e.target.value;
+        total = qty * price;
+        $("#total").val(total); 
+    }
+    
+    input.addEventListener("input", inputHandler); 
+
+ 
+}) 
+
+$('#sltid').change(function() { 
+    
+    price = $("#sltid").find(':selected').attr('data-price'); 
+    max = $("#sltid").find(':selected').attr('data-max'); 
+    itmid = $("#sltid").find(':selected').attr('data-id');
+    selecteditem = document.getElementById('sltid').value;  
+    $("#qty").val(1); 
+    qty =  $("#qty").val();   
+    $("#price").val(price); 
+    total = qty * price;
+    $("#total").val(total);  
+
+const inputHandler = function(e) { 
+        qty =  e.target.value;
+        total = qty * price;
+        $("#total").val(total);  
+}
+    
+    input.addEventListener("input", inputHandler);
+
+
+});
+
+
+
+
+
+
+
+
+
+
+document.getElementById("submit").onclick = function(){ 
+        
+        qty =  $("#qty").val(); 
+        phone =  $("#clientPhone").val(); 
+        client =  $("#clientName").val(); 
+        address =  $("#clientAddress").val();   
+        total =  $("#total").val();   
+        oid =  $("#userid").val(); 
+        
+        
+
+    var same = (itmid === firstitm); 
+    if(qty == "" || phone == "" || client == "" || address == "" || total == "" ) alert("Please fill out all fields!")
+    else if(parseInt(qty) > parseInt(max) && !same || parseInt(qty) < 1) alert("Please the quantity should be between 1 and " + max);
+    else if(parseInt(qty) > parseInt(valid_max) && same || parseInt(qty) < 1) alert("Please the quantity should be between 1 and " + valid_max);
+
+    else{   
+    $("#submit").prop('disabled', true);    
+    var myOrder = {   
+        clientName: client,
+        item: selecteditem,
+        clientAddress: address,
+        clientPhone: phone,
+        itm_id: itmid,
+        qty: qty,
+        price: price,
+        total: total
+    }     
+    //data for old itm
+    var data1 = {
+        "instock": parseInt(valid_max) - parseInt(qty)
+    }  
+
+    //data for new itm
+    var data2 = {
+        "instock": parseInt(max) - parseInt(qty)
+    }   
+    //return old item to init
+    var data3 = {
+        "instock": parseInt(valid_max)
+    }   
+
+
+    console.log("old itm will be = " + (parseInt(valid_max) - parseInt(qty)));
+    console.log("New itm will be = " + (parseInt(max) - parseInt(qty)));
+    
+    var request = {
+        "url" : `${urll}/api/users/${oid}`,
+        "method" : "PUT",
+        "data" : myOrder
+    }
+    $.ajax(request).done(function(response3){  
+    })
+    
+    if(itmid == firstitm){ 
+        var request2 = {
+            "url" : `${urll}/api/items/${firstitm}`,
+            "method" : "PUT",
+            "data" : data1
+        } 
+
+        $.ajax(request2).done(function(response2){ 
+            alert("Order updated successful!"); 
+            window.location.replace("/order");   
+        })
+    
+    }
+    else {
+    var request3 = {
+        "url" : `${urll}/api/items/${itmid}`,
+        "method" : "PUT",
+        "data" : data2
+    } 
+
+    $.ajax(request3).done(function(response1){  
+    })
+
+
+
+    var request2 = {
+        "url" : `${urll}/api/items/${firstitm}`,
+        "method" : "PUT",
+        "data" : data3
+    } 
+
+    $.ajax(request2).done(function(response2){ 
+        alert("Order updated successful!"); 
+        window.location.replace("/order");   
+    })
+
+    }
+
+
+}
+}
+  
+
+
+
+
+</script>
+
+ 
+
+
+
+</body>
+</html>

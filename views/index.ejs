@@ -1,0 +1,133 @@
+
+<%-include('include/_header')%>
+
+  
+
+
+
+<main id="site-main"> 
+    <div class="box-nav d-flex justify-between mySearchM"> 
+      <div class="border-shadow btntotal" style="margin-right: 0;text-align: center;">
+        <span class="text-gradient">Total: $<%=total%></span>
+      </div> 
+        <div id="cover">
+            <form id="searchform1">
+              <div class="tb">
+                <div class="td"><input type="text" id="searchText1" placeholder="Search" oninput="this.value = this.value.toLowerCase()"></div>
+                <div class="td" id="s-cover">
+                  <button type="submit">
+                    <div id="s-circle"></div>
+                    <span></span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div> 
+    </div>
+
+    <div class="container">
+        <div class="box-nav d-flex justify-between">
+            <a href="/add_user" class="border-shadow btnorder">
+                <span class="text-gradient">New Order <i class="fa-solid fa-cart-shopping"></i></span>
+            </a>
+            <a href="/upload2" class="border-shadow btnorder">
+                <span class="text-gradient">Add Items <i class="fa-solid fa-box"></i></span>
+            </a> 
+ 
+        </div>
+
+
+
+        <div class="box-nav d-flex justify-between mySearchD">  
+
+            <div id="cover">
+                <form id="searchform">
+                  <div class="tb">
+                    <div class="td"><input type="text" id="searchText" placeholder="Search" oninput="this.value = this.value.toLowerCase()"></div>
+                    <div class="td" id="s-cover">
+                      <button type="submit">
+                        <div id="s-circle"></div>
+                        <span></span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+        </div>
+
+        <div class="box-nav d-flex justify-between" style="float: right;">  
+            <div class="border-shadow btntotal" id="total001" style="margin-right: 0;">
+              <span class="text-gradient">Total: $<%=total%></span>
+            </div> 
+            <a onclick="exportCSVExcel()" class="border-shadow btnorder" style="margin-right: 0;">
+              <span class="text-gradient"><i class="fa-solid fa-download"></i></span>
+          </a> 
+            <a href="https://bo-maison.com/compare.php" class="border-shadow btnorder" style="margin-right: 0;">
+                <span class="text-gradient">Compare</span>
+            </a>  
+            <a href="/delivery" class="border-shadow btnorder" style="margin-right: 0;">
+                <span class="text-gradient">Delivery</span>
+            </a>  
+            <a href="/order" class="border-shadow btnorder" style="margin-right: 0;">
+                <span class="text-gradient">View Orders <i class="fa-solid fa-list"></i></span>
+            </a>
+ 
+        </div>
+
+        <form action="/item"method="POST">
+            <table class="table" id="tblid">
+                <thead class="thead-dark">
+                    <tr>  
+                        <th>Item Name</th> 
+                        <th>Item Image</th> 
+                        <th>Instock</th> 
+                        <th>Item Price($)</th>  
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <%-include('include/_show2')%>
+                </tbody>
+            </table>
+        </form>
+        
+ 
+        
+
+    </div>
+</main>
+
+ 
+ 
+<%-include('include/_footer')%>
+
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script>
+ 
+ 
+
+        function exportCSVExcel() {  
+          
+    // Clone the table to avoid modifying the original
+    var $table = $('#tblid').clone(); 
+
+    // Remove the columns you don't want to export
+    $table.find('th:nth-child(2), td:nth-child(2), th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5)').remove();
+
+    // Convert the modified table to Excel
+    $table.table2excel({
+        exclude: ".noExl",
+        name: "Worksheet Name",
+        filename: "init.xlsx" // Specify ".xlsx" extension
+    });
+ 
+
+        } 
+
+
+</script>
+
+
+
+
+ 

@@ -1,0 +1,36 @@
+ 
+
+
+
+
+
+
+<form  id="add_item"> 
+    <div class="new_user">
+       <div class="form-group">
+           <label for="itemName" class="text-light">Item Name</label>
+           <input type="hidden" name="id" value="">
+           <input type="text" name="itemName" value="" placeholder="Item Name" oninput="this.value = this.value.toLowerCase()" required>
+       </div>  
+
+        <div class="form-group"> 
+            <label for="instock" class="text-light">Instock</label> 
+            <input type="number" name="instock" value="" placeholder="instock" min="0" required>  
+        </div>
+
+       
+       <div class="form-group">
+           <label for="price" class="text-light">Price</label> 
+           <input type="number" name="price" value="" placeholder="Price of Items" required>
+       </div> 
+
+       <div class="form-group">
+           <button type="submit" class="btn text-dark update">save</button>
+       </div>
+       
+    </div>
+</form>
+
+
+ 
+

@@ -1,0 +1,244 @@
+
+<%-include('include/_header')%>
+
+<main id="site-main">
+    <div class="container"> 
+        <div class="box-nav d-flex justify-between">
+            <div class="filter">
+                <a href="/"><i class="fas fa-angle-double-left"></i>Main Page</a>
+            </div> 
+         </div>
+
+         <div class="box-nav" style="float: right;"> 
+            <a href="#openModal" class="border-shadow btnorder" style="margin-right: 0;">
+                <span class="text-gradient">Export Excel <i class="fa-solid fa-file-excel"></i></span>
+            </a>    
+            <div id="openModal" class="modalDialog">
+            <div>
+                <a href="#close" title="Close" class="close">X</a>
+
+                <div class="container">
+                    <div class="plans">
+                      <div class="title">Choose a export type</div>
+                      <label class="plan basic-plan" for="all">
+                        <input checked type="radio" name="plan" id="all" />
+                        <div class="plan-content">
+                          <img loading="lazy" src="https://tatertar.sirv.com/selection.png" alt="" />
+                          <div class="plan-details">
+                            <span>All Data</span>
+                            <p>Export all orders into Excel sheet</p>
+                          </div>
+                        </div>
+                      </label>
+                  
+                      <label class="plan complete-plan" for="selected">
+                        <input type="radio" id="selected" name="plan" />
+                        <div class="plan-content">
+                          <img loading="lazy" src="https://tatertar.sirv.com/select-all.png" alt="" />
+                          <div class="plan-details">
+                            <span>Specific Data</span>
+                            <p>Export specific orders by delivery name into Excel sheet</p>
+                          </div>
+                        </div>
+                      </label>
+
+
+                      <div class="form-group" id="newStud">
+                        <div class="form-group">  
+                            <label for="item" class="text-light">Select delivery name</label>  
+                    
+                           <select name="item" id="nameselect"  required>
+                            <option disabled selected value> -- select an option -- </option>
+                            <% for(var i = 1; i < names.length;i++){ %>  
+                                   <option >
+                                       <%= names[i] %>
+                                   </option>   
+                            <% }%> 
+                        </select>
+                        </div>  
+                    </div>
+                        <div style="width: 100%;">   
+                        <input type="button" value="Export" onclick="exportCSVExcel()" class="btn3"/>
+                        </div>
+            </div>
+
+ 
+                  </div> 
+            </div>
+            </div> 
+ 
+        </div>
+
+        <div class="form-title text-center">
+            <h2 class="text-dark">All Deliveries</h2>
+             
+        </div> 
+        <form action="/"method="POST">
+            <table id="tblid" class="table">
+                <thead class="thead-dark">
+                    <tr>  
+                        <th>Delivery Name</th>  
+                        <th>Order #</th>  
+                        <th>Delivery Amount($)</th> 
+                        <th class="no-export">Action</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <%-include('include/_show4')%>
+                </tbody>
+            </table>  
+        </form>
+        
+
+        <table id="tblid2" style="visibility: hidden;">
+          <tr>
+            <th>Delivery Name</th>  
+            <th>Order #</th>  
+            <th>Delivery Amount($)</th> 
+          </tr>  
+        </table> 
+       
+        
+
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="/js/order.js" ></script>
+ 
+
+</body>
+
+<footer>
+<p></p>
+</footer>
+
+</html>
+
+ 
+
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script>
+
+updateSubTotal(); 
+myAddRow(); 
+var totalval ;
+function updateSubTotal() { 
+  var table = document.getElementById("tblid");
+  let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+    return total + parseFloat(row.cells[2].innerHTML);
+  }, 0);
+  totalval = subTotal.toFixed(2);
+}
+
+function myAddRow(){
+  var table = document.getElementById("tblid");
+  var row = table.insertRow(table.rows.length);
+  var cell0 = row.insertCell(0); 
+  var cell1 = row.insertCell(1); 
+  cell0.innerHTML = "Total($)"; 
+  cell1.innerHTML = totalval;  
+}
+
+
+ 
+
+var allrd = document.getElementById("all");
+var selectrd = document.getElementById("selected");
+
+selectrd.onchange = function() {
+  if (selectrd.checked === true) {
+    document.getElementById("newStud").classList.add('show')
+  }
+}
+
+allrd.onchange = function() {
+  if (allrd.checked === true) {
+    document.getElementById("newStud").classList.remove('show')
+  }
+}
+
+
+
+
+ 
+
+
+function exportCSVExcel() {
+  var tbl = []
+  if(allrd.checked === true){
+	$('#tblid').table2excel({
+		exclude: ".no-export",
+		filename: "all_delivery.xls",
+		fileext: ".xls",
+		exclude_links: true,
+		exclude_inputs: true
+	});
+  }
+
+  else{
+      var name = $('#nameselect').val();
+    
+      var request1 = {
+        "url" : `${urll}/api/selected/${name}`,
+        "method" : "GET"
+      }   
+                
+      $.ajax(request1).done(function(response){ 
+        tbl = response; 
+        const table = document.querySelector('#tblid2');
+        for (const value of tbl)
+        table.innerHTML += `<tr id='abc'><td>${value.Dname}</td><td>${value.Did}</td><td>${value.Damount}</td></tr>`;
+        updateSubTotal2(); 
+        myAddRow2(); 
+        var totalval2 ;
+        function updateSubTotal2() { 
+          var table = document.getElementById("tblid2");
+          let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+            return total + parseFloat(row.cells[2].innerHTML);
+          }, 0);
+          totalval2 = subTotal.toFixed(2);
+        }
+
+        function myAddRow2(){
+          var table = document.getElementById("tblid2");
+          var row = table.insertRow(table.rows.length);
+          var cell0 = row.insertCell(0); 
+          var cell1 = row.insertCell(1); 
+          cell0.innerHTML = "Total($)"; 
+          cell1.innerHTML = totalval2;  
+        }
+
+
+
+        $('#tblid2').table2excel({
+        exclude: ".no-export",
+        filename: name+"_deliver.xls",
+        fileext: ".xls",
+        exclude_links: true,
+        exclude_inputs: true
+      });
+      tbl = null;
+      $("#tblid2 tr#abc").remove();  
+      document.getElementById("tblid2").deleteRow(1);
+
+      });
+
+
+
+
+  
+
+
+  }
+}
+
+
+
+
+
+ 
+
+
+</script>
