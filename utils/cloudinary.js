@@ -3,9 +3,9 @@ const cloudinary = require('cloudinary').v2;
 
 
 cloudinary.config({ 
-    cloud_name: 'donos0xbf' , 
-    api_key: '241996229693153' , 
-    api_secret: 'QW91KgkokDAttSe00TB8o0t_qCw'
+    cloud_name: 'daywecbjm' , 
+    api_key: '892845439384993' , 
+    api_secret: 'gYgIogX5qK88gn9CLCpj-_yN8oI'
   });
 
 
