@@ -73,7 +73,7 @@ app.post('/upload2', upload.single('img') , async (req, res, next)=>{
 
  
 
-var port = process.env.PORT || '3000'
+var port = process.env.PORT || '10000'
 app.listen(port, err => {
     if (err)
         throw err
