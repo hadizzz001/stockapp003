@@ -73,6 +73,10 @@
            <label for="total" class="text-light">Total Amount($)</label> 
            <input type="text" id="total" name="total" value="<%= user.total %>">
        </div>
+       <div class="form-group">
+           <label for="odate" class="text-light">Date</label> 
+           <input type="text" id="odate" name="odate" value="<%= user.odate %>">
+       </div>
 
        <div class="form-group"> 
         <input type="text" id="instock" name="instock" value="<%= user.instock%>" hidden>  
@@ -92,8 +96,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer" ></script>
 
 <script>
-const urll= "https://stockappp1.onrender.com"; 
-    var idx, total ,price, qty, max, itmid, selecteditem, fqty, firstitm, firststck , address, phone, clientname , stk , oid , valid_max; 
+const urll= "http://localhost:10000"; 
+    var idx, total ,price, qty, max, itmid, selecteditem, fqty, firstitm, firststck , address, phone, clientname , stk , oid , valid_max, odate; 
 
     window.addEventListener('load', function () {   
     fqty =  $("#qty").val(); 
@@ -106,6 +110,8 @@ const urll= "https://stockappp1.onrender.com";
     firstitm = $("#sltid").find(':selected').attr('data-id'); 
     valid_max = parseInt(max) + parseInt(fqty); 
     qty =  $("#qty").val();    
+    
+    
     
     const input = document.getElementById("qty");
     const inputHandler = function(e) { 
@@ -159,6 +165,7 @@ document.getElementById("submit").onclick = function(){
         address =  $("#clientAddress").val();   
         total =  $("#total").val();   
         oid =  $("#userid").val(); 
+        odate =  $("#odate").val();    
         
         
 
@@ -177,7 +184,8 @@ document.getElementById("submit").onclick = function(){
         itm_id: itmid,
         qty: qty,
         price: price,
-        total: total
+        total: total,
+        odate:  odate   
     }     
     //data for old itm
     var data1 = {

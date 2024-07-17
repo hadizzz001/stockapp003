@@ -1,5 +1,5 @@
  
-const urll= "https://stockappp1.onrender.com"; 
+const urll= "http://localhost:10000"; 
 
 if(state == 1){
     if(mac == cmac && tabID == tid){  

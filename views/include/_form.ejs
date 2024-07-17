@@ -298,7 +298,7 @@
 
 
 <script>
-  const urll = "https://stockappp1.onrender.com";
+  const urll = "http://localhost:10000";
 
   $('#clientPhone').on('input', function (e) {
     if (this.value.length == 10) {
@@ -313,7 +313,7 @@
   }
 
   $.ajax(request0).done(function (response) {
-    did = response[0].Did;
+    did = response[0].Did; 
   });
 
 
@@ -459,7 +459,7 @@
                     price: objCells.item(3).innerHTML,
                     total: objCells.item(4).innerHTML,
                     odate: odate
-                  }
+                  } 
 
                   var myItem = {
                     instock: parseInt(instocks[i - 1]) - parseInt(objCells.item(2).innerHTML)
@@ -479,11 +479,22 @@
                     "data": myOrder
                   }
 
+                  console.log('Order ID:', myOrder.oid);
+console.log('Client Name:', myOrder.clientName);
+console.log('Item:', myOrder.item);
+console.log('Client Address:', myOrder.clientAddress);
+console.log('Client Phone:', myOrder.clientPhone);
+console.log('Item ID:', myOrder.itm_id);
+console.log('Quantity:', myOrder.qty);
+console.log('Price:', myOrder.price);
+console.log('Total:', myOrder.total);
+console.log('Order Date:', myOrder.odate);
 
-                  $.ajax(request).done(function (response) {
+
+                  $.ajax(request).done(function (response) { 
                   })
 
-                  $.ajax(request2).done(function (response) {
+                  $.ajax(request2).done(function (response) { 
                   })
 
 
